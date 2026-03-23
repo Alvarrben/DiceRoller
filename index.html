@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="theme-color" content="#0f1b2d" />
+  <title>L5R Dice Roller</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&family=Cormorant+Garamond:wght@600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <main class="app-shell">
+    <section class="panel controls" aria-label="Configuracion de tirada">
+      <div class="input-grid">
+        <label>
+          Dados lanzados
+          <input id="roll-count" type="number" min="1" max="20" value="5" inputmode="numeric" />
+        </label>
+
+        <label>
+          Dados guardados
+          <input id="keep-count" type="number" min="1" max="10" value="3" inputmode="numeric" />
+        </label>
+      </div>
+
+      <div class="control-stack">
+        <input id="unskilled-toggle" class="mode-toggle-input" type="checkbox" />
+        <label for="unskilled-toggle" class="mode-toggle">Unskilled</label>
+
+        <input id="emphasis-toggle" class="mode-toggle-input" type="checkbox" />
+        <label for="emphasis-toggle" class="mode-toggle">Enfasis</label>
+
+        <button id="voice-btn" class="voice-button" type="button">Hablar comando</button>
+      </div>
+      <p id="voice-status" class="voice-status"></p>
+    </section>
+
+    <section class="panel result" aria-live="polite" aria-label="Resultado de la tirada">
+      <div class="result-layout">
+        <div class="result-main">
+          <p class="notation" id="notation">Notacion: 5k3</p>
+          <p class="total" id="total">Total guardado: -</p>
+          <p class="hint" id="hint"></p>
+        </div>
+        <div class="dice-list" id="dice-list"></div>
+      </div>
+    </section>
+  </main>
+
+  <script src="./app.js" defer></script>
+</body>
+</html>
