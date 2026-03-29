@@ -1,5 +1,3 @@
-const rollInput = document.querySelector("#roll-count");
-const keepInput = document.querySelector("#keep-count");
 const unskilledToggle = document.querySelector("#unskilled-toggle");
 const emphasisToggle = document.querySelector("#emphasis-toggle");
 const voiceButton = document.querySelector("#voice-btn");
@@ -9,6 +7,12 @@ const notationEl = document.querySelector("#notation");
 const totalEl = document.querySelector("#total");
 const hintEl = document.querySelector("#hint");
 const diceListEl = document.querySelector("#dice-list");
+
+const rollState = {
+  rolled: 5,
+  kept: 3,
+  hasVoiceCommand: false,
+};
 
 function clamp(value, min, max) {
   return Math.min(max, Math.max(min, value));
@@ -67,13 +71,13 @@ function rollOneDie({ explodingEnabled, emphasisEnabled }) {
 }
 
 function sanitizeInputs() {
-  const rolled = clamp(safeInt(rollInput.value, 5), 1, 20);
-  const kept = clamp(safeInt(keepInput.value, 3), 1, rolled);
+  const rolled = clamp(safeInt(rollState.rolled, 5), 1, 20);
+  const kept = clamp(safeInt(rollState.kept, 3), 1, rolled);
 
-  rollInput.value = String(rolled);
-  keepInput.value = String(kept);
+  rollState.rolled = rolled;
+  rollState.kept = kept;
 
-  notationEl.textContent = `Notacion: ${rolled}k${kept}`;
+  notationEl.textContent = rollState.hasVoiceCommand ? `Notacion: ${rolled}k${kept}` : "";
   return { rolled, kept };
 }
 
@@ -145,21 +149,6 @@ function rollPool() {
   renderDice(dice);
   speakRollResult(keptTotal, rolled, kept);
 }
-
-rollInput.addEventListener("input", () => {
-  const rolled = clamp(safeInt(rollInput.value, 5), 1, 20);
-  const kept = clamp(safeInt(keepInput.value, 3), 1, rolled);
-  rollInput.value = String(rolled);
-  keepInput.value = String(kept);
-  notationEl.textContent = `Notacion: ${rolled}k${kept}`;
-});
-
-keepInput.addEventListener("input", () => {
-  const rolled = clamp(safeInt(rollInput.value, 5), 1, 20);
-  const kept = clamp(safeInt(keepInput.value, 3), 1, rolled);
-  keepInput.value = String(kept);
-  notationEl.textContent = `Notacion: ${rolled}k${kept}`;
-});
 
 function parseVoiceCommand(text) {
   const normalized = text
@@ -267,9 +256,10 @@ function applyVoiceCommand(text) {
 
   const rolled = clamp(parsed.rolled, 1, 20);
   const kept = clamp(parsed.kept, 1, rolled);
-  rollInput.value = String(rolled);
-  keepInput.value = String(kept);
-  notationEl.textContent = `Notacion: ${rolled}k${kept}`;
+  rollState.rolled = rolled;
+  rollState.kept = kept;
+  rollState.hasVoiceCommand = true;
+  sanitizeInputs();
   voiceStatusEl.textContent = `Comando reconocido: ${rolled}k${kept}.`;
   rollPool();
 }

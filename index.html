@@ -15,18 +15,6 @@
 <body>
   <main class="app-shell">
     <section class="panel controls" aria-label="Configuracion de tirada">
-      <div class="input-grid">
-        <label>
-          Dados lanzados
-          <input id="roll-count" type="number" min="1" max="20" value="5" inputmode="numeric" />
-        </label>
-
-        <label>
-          Dados guardados
-          <input id="keep-count" type="number" min="1" max="10" value="3" inputmode="numeric" />
-        </label>
-      </div>
-
       <div class="control-stack">
         <input id="unskilled-toggle" class="mode-toggle-input" type="checkbox" />
         <label for="unskilled-toggle" class="mode-toggle">Unskilled</label>
@@ -42,7 +30,7 @@
     <section class="panel result" aria-live="polite" aria-label="Resultado de la tirada">
       <div class="result-layout">
         <div class="result-main">
-          <p class="notation" id="notation">Notacion: 5k3</p>
+          <p class="notation" id="notation"></p>
           <p class="total" id="total">Total guardado: -</p>
           <p class="hint" id="hint"></p>
         </div>

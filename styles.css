@@ -32,7 +32,6 @@ body {
 
 button,
 input,
-label,
 p,
 span,
 div {
@@ -81,34 +80,9 @@ h1 {
   padding: 22px;
 }
 
-.input-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 14px;
-}
-
 .control-stack {
-  margin-top: 10px;
   display: grid;
   gap: 12px;
-}
-
-label {
-  font-size: 1.15rem;
-  display: grid;
-  gap: 8px;
-  font-weight: 700;
-}
-
-input[type="number"] {
-  width: 100%;
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 16px;
-  font-size: 1.35rem;
-  font-weight: 700;
-  color: var(--ink);
-  background: rgba(0, 0, 0, 0.92);
 }
 
 .mode-toggle-input {
@@ -133,7 +107,6 @@ input[type="number"] {
   cursor: pointer;
   transition: transform 150ms ease, box-shadow 150ms ease;
   border: 2px solid rgba(255, 255, 255, 0.85);
-  min-height: 96px;
   display: grid;
   place-items: center;
   text-align: center;
@@ -275,10 +248,6 @@ input[type="number"] {
   .panel {
     border-radius: 18px;
     padding: 16px;
-  }
-
-  .input-grid {
-    grid-template-columns: 1fr;
   }
 
   .result-layout {
