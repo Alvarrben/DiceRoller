@@ -193,7 +193,7 @@ function parseVoiceCommand(text) {
       return Number.parseInt(token, 10);
     }
 
-    return Object.hasOwn(numberWords, token) ? numberWords[token] : null;
+    return Object.prototype.hasOwnProperty.call(numberWords, token) ? numberWords[token] : null;
   }
 
   const tokenPattern =
@@ -264,6 +264,14 @@ function applyVoiceCommand(text) {
   rollPool();
 }
 
+function extractTranscript(event) {
+  if (!event.results || !event.results[0] || !event.results[0][0]) {
+    return "";
+  }
+
+  return event.results[0][0].transcript || "";
+}
+
 function setupVoiceRecognition() {
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
@@ -304,7 +312,13 @@ function setupVoiceRecognition() {
   });
 
   recognition.addEventListener("result", (event) => {
-    const transcript = event.results[0][0].transcript || "";
+    const transcript = extractTranscript(event);
+
+    if (!transcript) {
+      voiceStatusEl.textContent = "No se recibio texto del reconocimiento de voz.";
+      return;
+    }
+
     applyVoiceCommand(transcript);
   });
 
