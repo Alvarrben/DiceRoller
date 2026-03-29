@@ -14,28 +14,44 @@
 </head>
 <body>
   <main class="app-shell">
-    <section class="panel controls" aria-label="Configuracion de tirada">
-      <div class="control-stack">
-        <input id="unskilled-toggle" class="mode-toggle-input" type="checkbox" />
-        <label for="unskilled-toggle" class="mode-toggle">Unskilled</label>
+    <nav class="tab-bar" aria-label="Secciones principales">
+      <button id="tab-roll" class="tab-button active" type="button" data-tab="roll">Dados</button>
+      <button id="tab-notes" class="tab-button" type="button" data-tab="notes">Notas</button>
+    </nav>
 
-        <input id="emphasis-toggle" class="mode-toggle-input" type="checkbox" />
-        <label for="emphasis-toggle" class="mode-toggle">Enfasis</label>
+    <section id="panel-roll" class="tab-panel active" aria-label="Tiradas de dados">
+      <section class="panel controls" aria-label="Configuracion de tirada">
+        <div class="control-stack">
+          <input id="unskilled-toggle" class="mode-toggle-input" type="checkbox" />
+          <label for="unskilled-toggle" class="mode-toggle">Unskilled</label>
 
-        <button id="voice-btn" class="voice-button" type="button">Hablar comando</button>
-      </div>
-      <p id="voice-status" class="voice-status"></p>
+          <input id="emphasis-toggle" class="mode-toggle-input" type="checkbox" />
+          <label for="emphasis-toggle" class="mode-toggle">Enfasis</label>
+
+          <button id="voice-btn" class="voice-button" type="button">Hablar comando</button>
+        </div>
+        <p id="voice-status" class="voice-status"></p>
+      </section>
+
+      <section class="panel result" aria-live="polite" aria-label="Resultado de la tirada">
+        <div class="result-layout">
+          <div class="result-main">
+            <p class="notation" id="notation"></p>
+            <p class="total" id="total">Total guardado: -</p>
+            <p class="hint" id="hint"></p>
+          </div>
+          <div class="dice-list" id="dice-list"></div>
+        </div>
+      </section>
     </section>
 
-    <section class="panel result" aria-live="polite" aria-label="Resultado de la tirada">
-      <div class="result-layout">
-        <div class="result-main">
-          <p class="notation" id="notation"></p>
-          <p class="total" id="total">Total guardado: -</p>
-          <p class="hint" id="hint"></p>
-        </div>
-        <div class="dice-list" id="dice-list"></div>
-      </div>
+    <section id="panel-notes" class="tab-panel" aria-label="Notas del usuario">
+      <section class="panel notes-panel">
+        <label class="notes-label" for="user-name">Usuario</label>
+        <input id="user-name" class="notes-user-input" type="text" placeholder="Nombre del usuario" autocomplete="username" />
+        <p id="notes-status" class="notes-status">Escribe un nombre para cargar tus notas.</p>
+        <textarea id="notes-field" class="notes-field" placeholder="Escribe aqui tus notas de partida..." spellcheck="true"></textarea>
+      </section>
     </section>
   </main>
 

@@ -2,16 +2,30 @@ const unskilledToggle = document.querySelector("#unskilled-toggle");
 const emphasisToggle = document.querySelector("#emphasis-toggle");
 const voiceButton = document.querySelector("#voice-btn");
 const voiceStatusEl = document.querySelector("#voice-status");
+const tabRollButton = document.querySelector("#tab-roll");
+const tabNotesButton = document.querySelector("#tab-notes");
+const rollPanel = document.querySelector("#panel-roll");
+const notesPanel = document.querySelector("#panel-notes");
+const userNameInput = document.querySelector("#user-name");
+const notesField = document.querySelector("#notes-field");
+const notesStatusEl = document.querySelector("#notes-status");
 
 const notationEl = document.querySelector("#notation");
 const totalEl = document.querySelector("#total");
 const hintEl = document.querySelector("#hint");
 const diceListEl = document.querySelector("#dice-list");
 
+const NOTES_USER_KEY = "l5r.notes.activeUser";
+const NOTES_PREFIX = "l5r.notes.user.";
+
 const rollState = {
   rolled: 5,
   kept: 3,
   hasVoiceCommand: false,
+};
+
+const notesState = {
+  activeUser: "",
 };
 
 function clamp(value, min, max) {
@@ -79,6 +93,76 @@ function sanitizeInputs() {
 
   notationEl.textContent = rollState.hasVoiceCommand ? `Notacion: ${rolled}k${kept}` : "";
   return { rolled, kept };
+}
+
+function normalizeUserName(value) {
+  return value.trim().replace(/\s+/g, " ");
+}
+
+function notesStorageKey(userName) {
+  return `${NOTES_PREFIX}${userName.toLowerCase()}`;
+}
+
+function setActiveTab(tabName) {
+  const showRoll = tabName === "roll";
+
+  tabRollButton.classList.toggle("active", showRoll);
+  tabNotesButton.classList.toggle("active", !showRoll);
+  rollPanel.classList.toggle("active", showRoll);
+  notesPanel.classList.toggle("active", !showRoll);
+}
+
+function updateNotesStatus(message) {
+  notesStatusEl.textContent = message;
+}
+
+function loadNotesForUser(userName) {
+  const safeUserName = normalizeUserName(userName);
+
+  if (!safeUserName) {
+    notesState.activeUser = "";
+    notesField.value = "";
+    notesField.disabled = true;
+    localStorage.removeItem(NOTES_USER_KEY);
+    updateNotesStatus("Escribe un nombre para cargar tus notas.");
+    return;
+  }
+
+  notesState.activeUser = safeUserName;
+  localStorage.setItem(NOTES_USER_KEY, safeUserName);
+  notesField.disabled = false;
+  notesField.value = localStorage.getItem(notesStorageKey(safeUserName)) || "";
+  updateNotesStatus(`Notas cargadas para ${safeUserName}.`);
+}
+
+function saveNotesForUser() {
+  if (!notesState.activeUser) {
+    updateNotesStatus("Escribe un nombre de usuario antes de guardar notas.");
+    return;
+  }
+
+  localStorage.setItem(notesStorageKey(notesState.activeUser), notesField.value);
+  updateNotesStatus(`Notas guardadas para ${notesState.activeUser}.`);
+}
+
+function setupNotes() {
+  notesField.disabled = true;
+
+  const savedUser = localStorage.getItem(NOTES_USER_KEY) || "";
+  if (savedUser) {
+    userNameInput.value = savedUser;
+    loadNotesForUser(savedUser);
+  }
+
+  userNameInput.addEventListener("change", () => {
+    loadNotesForUser(userNameInput.value);
+  });
+
+  userNameInput.addEventListener("blur", () => {
+    loadNotesForUser(userNameInput.value);
+  });
+
+  notesField.addEventListener("input", saveNotesForUser);
 }
 
 function renderDice(dice) {
@@ -337,5 +421,17 @@ function setupVoiceRecognition() {
   });
 }
 
+function setupTabs() {
+  tabRollButton.addEventListener("click", () => {
+    setActiveTab("roll");
+  });
+
+  tabNotesButton.addEventListener("click", () => {
+    setActiveTab("notes");
+  });
+}
+
 sanitizeInputs();
+setupTabs();
+setupNotes();
 setupVoiceRecognition();
